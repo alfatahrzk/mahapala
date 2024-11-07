@@ -1,3 +1,16 @@
+<?php
+
+
+session_start();
+//pengecekan session login
+if (isset($_SESSION['login'])) {
+  header('Location: ../index.php');
+  exit;
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,25 +57,26 @@
               </div>
               <h4>Salam Rimba !!!</h4>
               <h6 class="font-weight-light">Login untuk melanjutkan</h6>
-              <form class="pt-3">
+              <form class="pt-3" method="post" action="../function/proses_login.php">
                 <div class="form-group">
                   <input
-                    type="email"
+                    type="text"
                     class="form-control form-control-lg"
                     id="exampleInputEmail1"
-                    placeholder="Nama Lapang" />
+                    name="nim"
+                    placeholder="NIM" />
                 </div>
                 <div class="form-group">
                   <input
                     type="password"
                     class="form-control form-control-lg"
                     id="exampleInputPassword1"
+                    name="password"
                     placeholder="Password" />
                 </div>
                 <div class="mt-3 d-grid gap-2">
-                  <a
-                    class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"
-                    href="../../index.html">Masuk</a>
+                  <button type="submit" name="login" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">Login</button>
+
                 </div>
                 <div
                   class="my-2 d-flex justify-content-between align-items-center">
@@ -76,7 +90,7 @@
                 </div>
                 <div class="text-center mt-4 font-weight-light">
                   Belum punya akun?
-                  <a href="register.html" class="text-primary">Hubungi Humas</a>
+                  <a href="https://wa.me/6289649991128" class="text-primary">Hubungi Humas</a>
                 </div>
               </form>
             </div>

@@ -1,3 +1,24 @@
+<?php
+
+session_start();
+//pengecekan session login
+if (!isset($_SESSION['login'])) {
+  header('Location: login.php');
+  exit;
+}
+
+$nim = $_SESSION['nim'];
+
+
+require 'function/config.php';
+// mengambil query data anggota
+$query = "SELECT * FROM jabatan JOIN pengurus ON jabatan.id_jabatan = pengurus.id_jabatan JOIN anggota ON pengurus.id_anggota = anggota.id_anggota WHERE anggota.nim = '$nim'";
+$result = mysqli_query($conn, $query);
+
+$row = mysqli_fetch_assoc($result);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,18 +90,18 @@
               data-bs-toggle="dropdown"
               aria-expanded="false">
               <div class="nav-profile-img">
-                <img src="assets/images/faces/face1.jpg" alt="image" />
+                <img src="assets/images/member/<?= $row['foto'] ?>.png" alt="image" />
                 <span class="availability-status online"></span>
               </div>
               <div class="nav-profile-text">
-                <p class="mb-1 text-black">Al Fatah Rizki Ananda</p>
+                <p class="mb-1 text-black"><?= $row['nama'] ?></p>
               </div>
             </a>
             <div
               class="dropdown-menu navbar-dropdown"
               aria-labelledby="profileDropdown">
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="function/keluar.php">
+              <a class="dropdown-item" href="function/proses_keluar.php">
                 <i class="mdi mdi-logout me-2 text-danger"></i> Keluar
               </a>
             </div>
@@ -158,13 +179,13 @@
           <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
               <div class="nav-profile-image">
-                <img src="assets/images/faces/face1.jpg" alt="profile" />
+                <img src="assets/images/member/<?= $row['foto'] ?>.png" alt="profile" />
                 <span class="login-status online"></span>
                 <!--change to offline or busy as needed-->
               </div>
               <div class="nav-profile-text d-flex flex-column">
-                <span class="font-weight-bold mb-2">Al Fatah Rizki Ananda</span>
-                <span class="text-secondary text-small">Ketua Umum</span>
+                <span class="font-weight-bold mb-2"><?= $row['nama'] ?></span>
+                <span class="text-secondary text-small"><?= $row['nama_jabatan'] ?></span>
               </div>
             </a>
           </li>
@@ -230,6 +251,8 @@
 
         include $pages . '.php';
 
+
+
         ?>
         <!-- main-panel ends -->
 
@@ -239,7 +262,7 @@
             class="d-sm-flex justify-content-center justify-content-sm-between">
             <span
               class="text-muted text-center text-sm-left d-block d-sm-inline-block">Hak Cipta © 2024
-              <a href="https://www.bootstrapdash.com/" target="_blank">M-555-GJ</a> & Humas Mahapala.</span>
+              <a href="?pages/anggota/detail-anggota" target="_blank">M-555-GJ</a> & Humas Mahapala.</span>
             <span
               class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Made with
               <i class="mdi mdi-heart text-info"></i></span>

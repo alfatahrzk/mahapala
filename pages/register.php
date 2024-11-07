@@ -1,3 +1,15 @@
+<?php
+
+require '../function/config.php';
+session_start();
+
+// if (!isset($_SESSION['login'])) {
+//   header('Location: login.php');
+//   exit;
+// }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,44 +58,26 @@
               <h6 class="font-weight-light">
                 Perhatikan huruf besar dan kecil pada pada tiap form
               </h6>
-              <form class="pt-3" method="post" action="proses_register.php">
-                <div class="form-group">
-                  <input
-                    type="text"
-                    class="form-control form-control-lg"
-                    id="exampleInputUsername1"
-                    placeholder="Nama Lapang" />
-                </div>
+              <form class="pt-3" method="post" action="../function/proses_register.php">
                 <div class="form-group">
                   <input
                     type="text"
                     class="form-control form-control-lg"
                     id="exampleInputEmail1"
+                    name="nim"
                     placeholder="NIM" />
-                </div>
-                <div class="form-group">
-                  <select
-                    class="form-select form-select-lg"
-                    id="exampleFormControlSelect2">
-                    <option>Status Anggota</option>
-                    <option>Anggota Muda</option>
-                    <option>Anggota Penuh</option>
-                    <option>Anggota Luar Biasa</option>
-                    <option>Anggota Kehormatan</option>
-                    <option>Anggota Simpatisan</option>
-                  </select>
                 </div>
                 <div class="form-group">
                   <input
                     type="password"
+                    name="password"
                     class="form-control form-control-lg"
                     id="exampleInputPassword1"
                     placeholder="Password" />
                 </div>
-                <div class="mt-3 d-grid gap-2">
-                  <a
-                    class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn"
-                    href="../../index.html">Daftarkan</a>
+
+                <div class="mt-3 d-grid gap2">
+                  <button type="submit" name="register" class="btn btn-block btn-gradient-info btn-lg font-weight-medium auth-form-btn">Daftarkan</button>
                 </div>
               </form>
             </div>
