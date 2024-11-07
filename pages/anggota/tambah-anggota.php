@@ -56,13 +56,6 @@
                 name="arti" />
             </div>
             <div class="form-group">
-              <label for="exampleSelectGender">Jenis Kelamin</label>
-              <select class="form-select" id="exampleSelectGender">
-                <option>Male</option>
-                <option>Female</option>
-              </select>
-            </div>
-            <div class="form-group">
               <label for="exampleSelectGender">Status</label>
               <select class="form-select" id="exampleSelectGender">
                 <option>Anggota Muda</option>
@@ -118,7 +111,7 @@
                 </span>
               </div>
             </div>
-            <button type="Simpan" class="btn btn-gradient-info me-2">
+            <button type="submit" name="submit" class="btn btn-gradient-info me-2">
               Submit
             </button>
             <button class="btn btn-light">Cancel</button>
