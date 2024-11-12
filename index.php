@@ -3,7 +3,7 @@
 session_start();
 //pengecekan session login
 if (!isset($_SESSION['login'])) {
-  header('Location: login.php');
+  header('Location: pages/login.php');
   exit;
 }
 
@@ -12,10 +12,20 @@ $nim = $_SESSION['nim'];
 
 require 'function/config.php';
 // mengambil query data anggota
-$query = "SELECT * FROM jabatan JOIN pengurus ON jabatan.id_jabatan = pengurus.id_jabatan JOIN anggota ON pengurus.id_anggota = anggota.id_anggota WHERE anggota.nim = '$nim'";
+$query = "SELECT * FROM anggota JOIN pengurus ON anggota.id_anggota = pengurus.id_anggota JOIN jabatan ON pengurus.id_jabatan = jabatan.id_jabatan WHERE anggota.nim = '$nim'";
+// pengecekan apakah pengurus atau anggota biasa
+if (mysqli_num_rows(mysqli_query($conn, $query)) < 1) {
+  $query = "SELECT * FROM anggota WHERE nim = '$nim'";
+}
 $result = mysqli_query($conn, $query);
 
 $row = mysqli_fetch_assoc($result);
+
+if (!isset($row['nama_jabatan'])) {
+  $status = $row['status'];
+} else {
+  $status = $row['nama_jabatan'];
+}
 
 ?>
 
@@ -90,7 +100,7 @@ $row = mysqli_fetch_assoc($result);
               data-bs-toggle="dropdown"
               aria-expanded="false">
               <div class="nav-profile-img">
-                <img src="assets/images/member/<?= $row['foto'] ?>.png" alt="image" />
+                <img src="assets/images/member/<?= $row['foto'] ?>" alt="image" />
                 <span class="availability-status online"></span>
               </div>
               <div class="nav-profile-text">
@@ -101,10 +111,14 @@ $row = mysqli_fetch_assoc($result);
               class="dropdown-menu navbar-dropdown"
               aria-labelledby="profileDropdown">
               <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="function/proses_keluar.php">
+              <a class="dropdown-item" href="?req=akun&pages=edit&nim=<?= $nim ?>">
+                <i class="mdi mdi-account-box-edit-outline me-2 text-primary"></i> Edit Akun
+              </a>
+              <a class="dropdown-item" href="function/keluar.php">
                 <i class="mdi mdi-logout me-2 text-danger"></i> Keluar
               </a>
             </div>
+
           </li>
           <!-- end nav profil -->
 
@@ -115,41 +129,6 @@ $row = mysqli_fetch_assoc($result);
             </a>
           </li>
           <!-- end fitur fullscreen -->
-
-          <!-- start fitur notifikasi -->
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link count-indicator dropdown-toggle"
-              id="notificationDropdown"
-              href="#"
-              data-bs-toggle="dropdown">
-              <i class="mdi mdi-bell-outline"></i>
-              <span class="count-symbol bg-danger"></span>
-            </a>
-            <div
-              class="dropdown-menu dropdown-menu-end navbar-dropdown preview-list"
-              aria-labelledby="notificationDropdown">
-              <h6 class="p-3 mb-0">Notifications</h6>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <div class="preview-icon bg-success">
-                    <i class="mdi mdi-calendar"></i>
-                  </div>
-                </div>
-                <div
-                  class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                  <h6 class="preview-subject font-weight-normal mb-1">
-                    Event today
-                  </h6>
-                  <p class="text-gray ellipsis mb-0">
-                    Just a reminder that you have an event today
-                  </p>
-                </div>
-              </a>
-            </div>
-          </li>
-          <!-- end fitur notifikasi -->
 
           <!-- start fitur logout -->
           <li class="nav-item nav-logout d-none d-lg-block">
@@ -179,13 +158,13 @@ $row = mysqli_fetch_assoc($result);
           <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
               <div class="nav-profile-image">
-                <img src="assets/images/member/<?= $row['foto'] ?>.png" alt="profile" />
+                <img src="assets/images/member/<?= $row['foto'] ?>" alt="profile" />
                 <span class="login-status online"></span>
                 <!--change to offline or busy as needed-->
               </div>
               <div class="nav-profile-text d-flex flex-column">
-                <span class="font-weight-bold mb-2"><?= $row['nama'] ?></span>
-                <span class="text-secondary text-small"><?= $row['nama_jabatan'] ?></span>
+                <span class="font-weight-bold mb-2" style="font-size: 0.7rem;"><?= $row['nama'] ?></span>
+                <span class="text-secondary text-small"><?= $status ?></span>
               </div>
             </a>
           </li>
@@ -193,12 +172,36 @@ $row = mysqli_fetch_assoc($result);
 
           <!-- start sidebar beranda -->
           <li class="nav-item">
-            <a class="nav-link" href="?pages=beranda">
+            <a class="nav-link" href="?req=beranda">
               <span class="menu-title">Beranda</span>
               <i class="mdi mdi-home menu-icon"></i>
             </a>
           </li>
           <!-- end sidebar beranda -->
+
+          <!-- start sidebar akun-->
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              data-bs-toggle="collapse"
+              href="#akun"
+              aria-expanded="false"
+              aria-controls="icons">
+              <span class="menu-title">Akun</span>
+              <i class="mdi mdi-account menu-icon"></i>
+            </a>
+            <div class="collapse" id="akun">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="?req=akun&pages=list">List Akun</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="?req=akun&pages=daftar">Daftarkan Akun</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <!-- end sidebar akun-->
 
           <!-- start sidebar anggota-->
           <li class="nav-item">
@@ -209,12 +212,12 @@ $row = mysqli_fetch_assoc($result);
               aria-expanded="false"
               aria-controls="icons">
               <span class="menu-title">Anggota</span>
-              <i class="fa fa-group menu-icon"></i>
+              <i class="mdi mdi-account-group menu-icon"></i>
             </a>
             <div class="collapse" id="anggota">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="?pages=anggota/list-anggota">List Anggota</a>
+                  <a class="nav-link" href="?req=anggota&pages=list">List Anggota</a>
                 </li>
               </ul>
             </div>
@@ -241,19 +244,8 @@ $row = mysqli_fetch_assoc($result);
 
       <!-- main panel start -->
       <div class="main-panel">
-        <?php
-        require 'function/config.php';
-        if (!isset($_GET['pages'])) {
-          $pages = 'pages/beranda';
-        } else {
-          $pages = 'pages/' . $_GET['pages'];
-        }
 
-        include $pages . '.php';
-
-
-
-        ?>
+        <?php include 'pages/pages.php' ?>
         <!-- main-panel ends -->
 
         <!-- start footer -->
@@ -293,6 +285,7 @@ $row = mysqli_fetch_assoc($result);
   <!-- Custom js for this page -->
   <script src="assets/js/dashboard.js"></script>
   <!-- End custom js for this page -->
+
 </body>
 
 </html>

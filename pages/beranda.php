@@ -1,3 +1,11 @@
+<?php
+
+$query = "SELECT * FROM anggota";
+$result = mysqli_query($conn, $query);
+$jumlah_anggota = mysqli_num_rows($result);
+
+?>
+
 <div class="content-wrapper">
   <div class="page-header">
     <h3 class="page-title">
@@ -30,28 +38,12 @@
             Jumlah Anggota
             <i class="fa fa-group fa-24px float-end"></i>
           </h4>
-          <h2 class="mb-5">620</h2>
+          <h2 class="mb-5"><?= $jumlah_anggota ?></h2>
           <h6 class="card-text">Anggota Aktif 120</h6>
         </div>
       </div>
     </div>
     <!-- end card jumlah anggota -->
-
-    <!-- start grafik jumlah anggota -->
-    <div class="col-sm grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <h4 class="card-title">Grafik Anggota</h4>
-          <div class="doughnutjs-wrapper d-flex justify-content-center">
-            <canvas id="traffic-chart"></canvas>
-          </div>
-          <div
-            id="traffic-chart-legend"
-            class="rounded-legend legend-vertical legend-bottom-left pt-4"></div>
-        </div>
-      </div>
-    </div>
-    <!-- end grafik jumlah anggota -->
 
   </div>
   <div class="row">

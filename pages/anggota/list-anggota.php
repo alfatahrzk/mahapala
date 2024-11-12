@@ -35,7 +35,7 @@
           </div>
           <p class="card-description">
             Anggota bertambah? klik
-            <a href="?pages=anggota/tambah-anggota">Tambah Anggota</a>
+            <a href="?req=anggota&pages=daftar">Tambah Anggota</a>
           </p>
           <table class="table table-striped">
             <thead>
@@ -59,11 +59,11 @@
                 while ($row = $result->fetch_assoc()) {
                   echo '<tr>';
                   echo '<td class="py-1">';
-                  echo '<img src="assets/images/member/' . $row['foto'] . '.png" alt="' . htmlspecialchars($row['foto']) . '">'; // Menampilkan foto
+                  echo '<img src="assets/images/member/' . $row['foto'] . '" alt="' . htmlspecialchars($row['foto']) . '">'; // Menampilkan foto
                   echo '</td>';
                   echo '<td>' . htmlspecialchars($row['nama']) . '</td>';
                   echo '<td>';
-                  echo '<a href="?pages=anggota/detail-anggota&nim=' . $row['nim'] . '" class=""><i class="fa fa-external-link"></i></a>'; // Menampilkan tombol aksi
+                  echo '<a href="?req=anggota&pages=detail&nim=' . $row['nim'] . '" class=""><i class="fa fa-external-link"></i></a>'; // Menampilkan tombol aksi
                   echo '</td>';
                   echo '</tr>';
                 }
